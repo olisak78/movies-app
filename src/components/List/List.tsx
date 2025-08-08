@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../store/store';
 import { searchMovies } from '../../store/movieSlice';
 import './List.css';
+import { FaRegStar } from 'react-icons/fa';
 
 const List: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -16,7 +17,6 @@ const List: React.FC = () => {
   );
 
   useEffect(() => {
-    // Reset to page 1 when search keyword changes
     setCurrentPage(1);
   }, [currentSearchKeyword]);
 
@@ -25,14 +25,9 @@ const List: React.FC = () => {
 
     setCurrentPage(page);
 
-    // Check if this page is already in Redux
     if (!currentSearch.searchResults[page]) {
       dispatch(searchMovies({ keyword: currentSearchKeyword, page }));
     }
-  };
-
-  const handleAddClick = (imdbID: string) => {
-    console.log('Add clicked for movie:', imdbID);
   };
 
   const handleEditClick = (imdbID: string) => {
@@ -99,17 +94,18 @@ const List: React.FC = () => {
                   ) : (
                     <div className='no-poster'>No Image Available</div>
                   )}
+                  <div
+                    className='favorite-icon'
+                    onClick={() => handleFavoriteClick(movie.imdbID)}
+                    title='Add to Favorites'
+                  >
+                    <FaRegStar />
+                  </div>
                 </div>
                 <div className='movie-info'>
                   <h3 className='movie-title'>{movie.Title}</h3>
                   <p className='movie-year'>{movie.Year}</p>
                   <div className='movie-actions'>
-                    <button
-                      onClick={() => handleAddClick(movie.imdbID)}
-                      className='action-button add-button'
-                    >
-                      Add
-                    </button>
                     <button
                       onClick={() => handleEditClick(movie.imdbID)}
                       className='action-button edit-button'
@@ -121,12 +117,6 @@ const List: React.FC = () => {
                       className='action-button delete-button'
                     >
                       Delete
-                    </button>
-                    <button
-                      onClick={() => handleFavoriteClick(movie.imdbID)}
-                      className='action-button favorite-button'
-                    >
-                      Favorite
                     </button>
                   </div>
                 </div>
