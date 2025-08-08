@@ -5,12 +5,16 @@ import { searchMovies } from '../../store/movieSlice';
 import './List.css';
 import { FaRegStar } from 'react-icons/fa';
 
+// Import your fallback image - place the camera image in src/assets/
+import fallbackPoster from '../../assets/fallback-poster.jpg';
+
 const List: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { searches, currentSearchKeyword, loading } = useSelector(
     (state: RootState) => state.movies
   );
   const [currentPage, setCurrentPage] = useState(1);
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
 
   const currentSearch = searches.find(
     (search) => search.searchKeyword === currentSearchKeyword
@@ -18,6 +22,7 @@ const List: React.FC = () => {
 
   useEffect(() => {
     setCurrentPage(1);
+    setImageErrors(new Set()); // Reset image errors on new search
   }, [currentSearchKeyword]);
 
   const handlePageChange = (page: number) => {
@@ -28,6 +33,10 @@ const List: React.FC = () => {
     if (!currentSearch.searchResults[page]) {
       dispatch(searchMovies({ keyword: currentSearchKeyword, page }));
     }
+  };
+
+  const handleImageError = (imdbID: string) => {
+    setImageErrors((prev) => new Set(prev).add(imdbID));
   };
 
   const handleEditClick = (imdbID: string) => {
@@ -82,17 +91,23 @@ const List: React.FC = () => {
             {movies.map((movie) => (
               <div key={movie.imdbID} className='movie-card'>
                 <div className='movie-poster'>
-                  {movie.Poster !== 'N/A' ? (
+                  {movie.Poster !== 'N/A' && !imageErrors.has(movie.imdbID) ? (
                     <img
                       src={movie.Poster}
                       alt={movie.Title}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = '';
-                      }}
+                      onError={() => handleImageError(movie.imdbID)}
                     />
                   ) : (
-                    <div className='no-poster'>No Image Available</div>
+                    <div className='fallback-poster'>
+                      <img
+                        src={fallbackPoster}
+                        alt={`${movie.Title} - No poster available`}
+                        className='fallback-image'
+                      />
+                      <div className='fallback-overlay'>
+                        <p>No poster available</p>
+                      </div>
+                    </div>
                   )}
                   <div
                     className='favorite-icon'
