@@ -93,8 +93,7 @@ const List: React.FC = () => {
                       alt={movie.Title}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.src =
-                          'https://via.placeholder.com/300x450?text=No+Image';
+                        target.src = '';
                       }}
                     />
                   ) : (
