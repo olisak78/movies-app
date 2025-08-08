@@ -45,6 +45,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 
 .movie-card:hover {
@@ -283,4 +284,17 @@
 .page-number:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.edit-spinner {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

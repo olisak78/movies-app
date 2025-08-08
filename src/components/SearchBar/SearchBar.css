@@ -99,3 +99,51 @@
   border-radius: 4px;
   font-size: 14px;
 }
+
+.add-movie-button {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background-color: #28a745;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-movie-button:hover {
+  background-color: #218838;
+}
+
+.favorites-toggle {
+  padding: 12px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #666;
+  background-color: white;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.favorites-toggle:hover {
+  border-color: #ffc107;
+  color: #ffc107;
+}
+
+.favorites-toggle.active {
+  background-color: #ffc107;
+  border-color: #ffc107;
+  color: white;
+}
+
+.favorites-toggle.active:hover {
+  background-color: #e0a800;
+  border-color: #e0a800;
+}

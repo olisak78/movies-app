@@ -2,13 +2,16 @@ import './SearchBar.css';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../store/store';
-import { searchMovies } from '../../store/movieSlice';
+import { searchMovies, toggleShowFavoritesOnly } from '../../store/movieSlice';
 import { IoMdClose } from 'react-icons/io';
+import { FaStar, FaRegStar } from 'react-icons/fa';
 
 const SearchBar: React.FC = () => {
   const [searchInput, setSearchInput] = useState('');
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, error } = useSelector((state: RootState) => state.movies);
+  const { loading, error, showFavoritesOnly } = useSelector(
+    (state: RootState) => state.movies
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,10 +30,18 @@ const SearchBar: React.FC = () => {
     setSearchInput('');
   };
 
+  const handleToggleFavorites = () => {
+    dispatch(toggleShowFavoritesOnly());
+  };
+
+  const handleAddMovie = () => {
+    // To be implemented later
+    console.log('Add Movie clicked');
+  };
+
   return (
     <div className='search-bar-container'>
       <form onSubmit={handleSubmit} className='search-form'>
-        {/* Wrapper div for input and clear button */}
         <div className='search-input-wrapper'>
           <input
             type='text'
@@ -40,7 +51,6 @@ const SearchBar: React.FC = () => {
             className='search-input'
             disabled={loading}
           />
-          {/* Clear button - only visible when input has content */}
           {searchInput && (
             <button
               type='button'
@@ -58,6 +68,25 @@ const SearchBar: React.FC = () => {
           disabled={loading || !searchInput.trim()}
         >
           {loading ? 'Searching...' : 'Search'}
+        </button>
+        <button
+          type='button'
+          className='add-movie-button'
+          onClick={handleAddMovie}
+        >
+          Add Movie
+        </button>
+
+        <button
+          type='button'
+          className={`favorites-toggle ${showFavoritesOnly ? 'active' : ''}`}
+          onClick={handleToggleFavorites}
+          aria-label={
+            showFavoritesOnly ? 'Show all movies' : 'Show favorites only'
+          }
+          title={showFavoritesOnly ? 'Show all movies' : 'Show favorites only'}
+        >
+          {showFavoritesOnly ? <FaStar /> : <FaRegStar />}
         </button>
       </form>
       {error && <div className='error-message'>{error}</div>}
