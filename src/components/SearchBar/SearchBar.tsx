@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../store/store';
 import { searchMovies } from '../../store/movieSlice';
+import { IoMdClose } from 'react-icons/io';
 
 const SearchBar: React.FC = () => {
   const [searchInput, setSearchInput] = useState('');
@@ -22,17 +23,35 @@ const SearchBar: React.FC = () => {
     setSearchInput(e.target.value);
   };
 
+  const handleClearInput = () => {
+    setSearchInput('');
+  };
+
   return (
     <div className='search-bar-container'>
       <form onSubmit={handleSubmit} className='search-form'>
-        <input
-          type='text'
-          value={searchInput}
-          onChange={handleInputChange}
-          placeholder='Search for movies...'
-          className='search-input'
-          disabled={loading}
-        />
+        {/* Wrapper div for input and clear button */}
+        <div className='search-input-wrapper'>
+          <input
+            type='text'
+            value={searchInput}
+            onChange={handleInputChange}
+            placeholder='Search for movies...'
+            className='search-input'
+            disabled={loading}
+          />
+          {/* Clear button - only visible when input has content */}
+          {searchInput && (
+            <button
+              type='button'
+              className='clear-button'
+              onClick={handleClearInput}
+              aria-label='Clear search input'
+            >
+              <IoMdClose />
+            </button>
+          )}
+        </div>
         <button
           type='submit'
           className='search-button'
